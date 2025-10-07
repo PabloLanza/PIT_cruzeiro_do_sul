@@ -41,9 +41,9 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 ## ⚙️ Pré-requisitos
 
 - Conexão com a Internet
-  
-▶️ Como Executar o Projeto
-Acesse o link: 
+---
+ ▶️ Como Executar o Projeto
+- Acesse o link: 
 
 
 🧩 Tecnologias Utilizadas
