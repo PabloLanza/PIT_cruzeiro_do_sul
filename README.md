@@ -20,6 +20,7 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 │
 ├── home.py # Página inicial do painel
 ├── func.py # Funções usadas
+├── requirements.txt # Bibliotecas necessárias
 ├── pages/ # Outras páginas do projeto
 │ ├── 1_artilharia.py
 │ ├── 2_chutes.py
