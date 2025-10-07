@@ -18,7 +18,8 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 ````
 📁 trabalho/
 │
-├── Home.py # Página inicial do painel
+├── home.py # Página inicial do painel
+├── func.py # Funções usadas
 ├── pages/ # Outras páginas do projeto
 │ ├── 1_artilharia.py
 │ ├── 2_chutes.py
