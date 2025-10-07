@@ -43,7 +43,8 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 - Conexão com a Internet
 ---
  ▶️ Como Executar o Projeto
-- Acesse o link: 
+- Acesse o link:
+---
 
 
 🧩 Tecnologias Utilizadas
