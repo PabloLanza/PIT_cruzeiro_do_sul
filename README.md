@@ -58,15 +58,7 @@ OpenPyXL
 
 Matplotlib / Plotly (se aplicável para visualização)
 
-🎨 Interface da Página Inicial
-A Home apresenta:
-
-Um título estilizado em dark blue e em negrito
-
-Uma descrição introdutória sobre o painel
-
-Um banner ilustrativo exibido ao final da página
-
+---
 👨‍💻 Autor
 Pablo Lanza
 Desenvolvedor e Analista de Dados em formação.
