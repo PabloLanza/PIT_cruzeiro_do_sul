@@ -16,20 +16,23 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 
 ## 🧭 Estrutura do Projeto
 ````
-📁 meu_painel/
+📁 trabalho/
 │
 ├── Home.py # Página inicial do painel
 ├── pages/ # Outras páginas do projeto
-│ ├── 1_Analises.py
-│ ├── 2_Relatorios.py
-│ └── 3_Sobre.py
+│ ├── 1_artilharia.py
+│ ├── 2_chutes.py
+│ ├── 3_minutos_dos_gols.py
+│ └── 4_passes.py
 │
-├── dados/ # Bases de dados utilizadas
-│ ├── vendas.xlsx
-│ └── clientes.xlsx
+├── bases/ # Bases de dados utilizadas
+│ ├── ataque.xlsx
+│ ├── defesa.xlsx
+│ ├── escalacoes.xlsx
+│ └── jogos.xlsx
 │
-└── imagens/
-└── painel.png # Imagem ilustrativa da Home
+└── images/
+  └── img.jpg
 ````
 
 ---
