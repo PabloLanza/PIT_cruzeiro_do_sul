@@ -28,8 +28,8 @@ def gols(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("escalacoes.xlsx")
-    df_jogos = pd.read_excel("jogos.xlsx")
+    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_gols = pd.merge(df_escalacao[["id_jogo", "autor_gols_pro"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -78,8 +78,8 @@ def assistencias(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("escalacoes.xlsx")
-    df_jogos = pd.read_excel("jogos.xlsx")
+    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
 
     #FAZENDO A JUNÇÃO DOS DFs
     df_ass = pd.merge(df_escalacao[["id_jogo", "assistencias"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -128,8 +128,8 @@ def dobradinha(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("escalacoes.xlsx")
-    df_jogos = pd.read_excel("jogos.xlsx")
+    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_gol_ass = pd.merge(df_escalacao[["id_jogo", "autor_gols_pro", "assistencias"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -213,8 +213,8 @@ def perfil_finalizacoes(competicoes=[], mando=[]):
     import matplotlib.pyplot as plt
 
     #TABELAS QUE SERÃO USADAS
-    df_jogos = pd.read_excel("jogos.xlsx")
-    df_ataque = pd.read_excel("ataque.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_ataque = pd.read_excel("bases/ataque.xlsx")
 
     #JUNÇÃO DOS DFs
     df_chutes = pd.merge(df_jogos[["id_jogo", "competicao", "mando"]], df_ataque[["id_jogo", "chutes_cruzeiro", "chutes_adv", "chutes_gol_cruzeiro", "chutes_gol_adv", "chutes_area_cruzeiro", "chutes_area_adv", "chutes_fora_area_cruzeiro", "chutes_fora_area_adv"]], on="id_jogo", how="inner")
@@ -276,8 +276,8 @@ def passes_trocados(competicoes=[], mando=[]):
     import numpy as np
 
     #TABELAS QUE SERÃO USADAS
-    df_jogos = pd.read_excel("Jogos.xlsx")
-    df_ataque = pd.read_excel("ataque.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_ataque = pd.read_excel("bases/ataque.xlsx")
 
     #JUNÇÃO DOS DFs
     df_passes = pd.merge(df_jogos[["id_jogo", "adversario", "competicao", "mando"]], df_ataque[["id_jogo", "passes_cruzeiro", "passes_certos_cruzeiro", "passes_adv", "passes_certos_adv"]], on="id_jogo", how="inner")
@@ -346,8 +346,8 @@ def minutos_gols(competicoes=[], mando=[]):
     import numpy as np
 
     #TABELAS QUE SERÃO USADAS
-    df_esc = pd.read_excel("escalacoes.xlsx")
-    df_jogos = pd.read_excel("jogos.xlsx")
+    df_esc = pd.read_excel("bases/escalacoes.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_min = pd.merge(df_esc[["id_jogo", "minutos_gols_pro", "minutos_gols_contra"]], 
@@ -428,8 +428,8 @@ def resumo_ataque(competicoes=[], mando=[]):
     import pandas as pd
 
     #TABELAS QUE SERÃO USADAS
-    df_jogos = pd.read_excel("jogos.xlsx")
-    df_ataque = pd.read_excel("ataque.xlsx")
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_ataque = pd.read_excel("bases/ataque.xlsx")
 
     #JUNÇÃO DOS DFs
     df_resumo_ataque = pd.merge(df_jogos[["id_jogo", "competicao", "mando"]], df_ataque, on="id_jogo", how="inner")
