@@ -28,8 +28,8 @@ def gols(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_escalacao = pd.read_excel("escalacoes.xlsx")
+    df_jogos = pd.read_excel("jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_gols = pd.merge(df_escalacao[["id_jogo", "autor_gols_pro"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -78,8 +78,8 @@ def assistencias(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_escalacao = pd.read_excel("escalacoes.xlsx")
+    df_jogos = pd.read_excel("jogos.xlsx")
 
     #FAZENDO A JUNÇÃO DOS DFs
     df_ass = pd.merge(df_escalacao[["id_jogo", "assistencias"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -128,8 +128,8 @@ def dobradinha(competicoes=[], mando=[]):
 
 
     #TABELAS QUE SERÃO USADAS
-    df_escalacao = pd.read_excel("bases/escalacoes.xlsx")
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_escalacao = pd.read_excel("escalacoes.xlsx")
+    df_jogos = pd.read_excel("jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_gol_ass = pd.merge(df_escalacao[["id_jogo", "autor_gols_pro", "assistencias"]], df_jogos[["id_jogo", "competicao", "mando"]], on="id_jogo", how="inner")
@@ -213,8 +213,8 @@ def perfil_finalizacoes(competicoes=[], mando=[]):
     import matplotlib.pyplot as plt
 
     #TABELAS QUE SERÃO USADAS
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
-    df_ataque = pd.read_excel("bases/ataque.xlsx")
+    df_jogos = pd.read_excel("jogos.xlsx")
+    df_ataque = pd.read_excel("ataque.xlsx")
 
     #JUNÇÃO DOS DFs
     df_chutes = pd.merge(df_jogos[["id_jogo", "competicao", "mando"]], df_ataque[["id_jogo", "chutes_cruzeiro", "chutes_adv", "chutes_gol_cruzeiro", "chutes_gol_adv", "chutes_area_cruzeiro", "chutes_area_adv", "chutes_fora_area_cruzeiro", "chutes_fora_area_adv"]], on="id_jogo", how="inner")
@@ -276,8 +276,8 @@ def passes_trocados(competicoes=[], mando=[]):
     import numpy as np
 
     #TABELAS QUE SERÃO USADAS
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
-    df_ataque = pd.read_excel("bases/ataque.xlsx")
+    df_jogos = pd.read_excel("Jogos.xlsx")
+    df_ataque = pd.read_excel("ataque.xlsx")
 
     #JUNÇÃO DOS DFs
     df_passes = pd.merge(df_jogos[["id_jogo", "adversario", "competicao", "mando"]], df_ataque[["id_jogo", "passes_cruzeiro", "passes_certos_cruzeiro", "passes_adv", "passes_certos_adv"]], on="id_jogo", how="inner")
@@ -346,8 +346,8 @@ def minutos_gols(competicoes=[], mando=[]):
     import numpy as np
 
     #TABELAS QUE SERÃO USADAS
-    df_esc = pd.read_excel("bases/escalacoes.xlsx")
-    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_esc = pd.read_excel("escalacoes.xlsx")
+    df_jogos = pd.read_excel("jogos.xlsx")
 
     #JUNÇÃO DOS DFs
     df_min = pd.merge(df_esc[["id_jogo", "minutos_gols_pro", "minutos_gols_contra"]], 
@@ -423,6 +423,67 @@ def minutos_gols(competicoes=[], mando=[]):
     return fig
 
 
+
+def resumo_ataque(competicoes=[], mando=[]):
+    import pandas as pd
+
+    #TABELAS QUE SERÃO USADAS
+    df_jogos = pd.read_excel("jogos.xlsx")
+    df_ataque = pd.read_excel("ataque.xlsx")
+
+    #JUNÇÃO DOS DFs
+    df_resumo_ataque = pd.merge(df_jogos[["id_jogo", "competicao", "mando"]], df_ataque, on="id_jogo", how="inner")
+    
+    #REMOVER ESPAÇOS
+    df_resumo_ataque[["competicao", "mando"]] = remover_espacos(df=df_resumo_ataque[["competicao", "mando"]])
+
+    #FILTRO
+    df_resumo_ataque = filtro_comp_mando(c=competicoes, m=mando, df=df_resumo_ataque)
+
+    #REMOVENDO AS COLUNAS QUE NÃO SERÃO USADAS
+    df_res_adv = df_resumo_ataque[["posse_adv", "chutes_adv", "chutes_gol_adv", "chutes_area_adv",
+                                              "chutes_fora_area_adv", "passes_adv", "passes_certos_adv", "esc_adv"]]
+    
+    df_resumo_ataque = df_resumo_ataque.drop(["id_jogo", "competicao", "mando", "posse_adv", "chutes_adv", "chutes_gol_adv", "chutes_area_adv",
+                                              "chutes_fora_area_adv", "passes_adv", "passes_certos_adv", "esc_adv"], axis=1)
+
+
+    df_resumo_ataque = df_resumo_ataque.mean().reset_index()
+    df_resumo_ataque.columns = ["estatistica", "media por jogo"]
+    df_resumo_ataque["media por jogo"] = round(df_resumo_ataque["media por jogo"], 2)
+
+    df_res_adv = df_res_adv.mean().reset_index()
+    df_res_adv.columns = ["estatistica", "media por jogo"]
+    df_res_adv["media por jogo"] = round(df_res_adv["media por jogo"], 2)
+    
+    #ALTERANDO OS NOMES DAS ESTATÍSTICAS
+    df_resumo_ataque["estatistica"] = df_resumo_ataque["estatistica"].map({
+        "posse_cruzeiro": "Posse de Bola do Cruzeiro",
+        "chutes_cruzeiro": "Chutes do Cruzeiro",
+        "chutes_gol_cruzeiro": "Chutes do Cruzeiro ao Gol",
+        "chutes_area_cruzeiro": "Chutes do Cruzeiro Dentro da Área",
+        "chutes_fora_area_cruzeiro": "Chutes do Cruzeiro de Fora da Área",
+        "passes_cruzeiro": "Passes do Cruzeiro",
+        "passes_certos_cruzeiro": "Passes Certos do Cruzeiro",
+        "esc_cruzeiro": "Escanteios do Cruzeiro",
+        "lancamentos_cruzeiro": "Lançamentos do Cruzeiro",
+        "lancamentos_cruzeiro_certos": "Lançamentos Certos do Cruzeiro",
+        "cruzamentos_cruzeiro": "Cruzamentos do Cruzeiro",
+        "cruzamentos_cruzeiro_certos": "Cruzamentos Certos do Cruzeiro"
+    })
+
+    df_res_adv["estatistica"] = df_res_adv["estatistica"].map({
+        "posse_adv": "Posse de Bola do Adversário",
+        "chutes_adv": "Chutes do Adversário",
+        "chutes_gol_adv": "Chutes do Adversário ao Gol",
+        "chutes_area_adv": "Chutes do Adversário Dentro da Área",
+        "chutes_fora_area_adv": "Chutes do Adversário de Fora da Área",
+        "passes_adv": "Passes do Adversário",
+        "passes_certos_adv": "Passes Certos do Adversário",
+        "esc_adv": "Escanteios do Adversário"
+    })
+
+    return df_resumo_ataque, df_res_adv
 
 
 
