@@ -440,24 +440,24 @@ def resumo_ataque(competicoes=[], mando=[]):
     #FILTRO
     df_resumo_ataque = filtro_comp_mando(c=competicoes, m=mando, df=df_resumo_ataque)
 
-    #REMOVENDO AS COLUNAS QUE NÃO SERÃO USADAS
+    #DIVIDINDO O DF EM CRUZEIRO X ADVERSÁRIO
     df_res_adv = df_resumo_ataque[["posse_adv", "chutes_adv", "chutes_gol_adv", "chutes_area_adv",
                                               "chutes_fora_area_adv", "passes_adv", "passes_certos_adv", "esc_adv"]]
     
-    df_resumo_ataque = df_resumo_ataque.drop(["id_jogo", "competicao", "mando", "posse_adv", "chutes_adv", "chutes_gol_adv", "chutes_area_adv",
+    df_resumo_cruzeiro = df_resumo_ataque.drop(["id_jogo", "competicao", "mando", "posse_adv", "chutes_adv", "chutes_gol_adv", "chutes_area_adv",
                                               "chutes_fora_area_adv", "passes_adv", "passes_certos_adv", "esc_adv"], axis=1)
 
 
-    df_resumo_ataque = df_resumo_ataque.mean().reset_index()
-    df_resumo_ataque.columns = ["estatistica", "media por jogo"]
-    df_resumo_ataque["media por jogo"] = round(df_resumo_ataque["media por jogo"], 2)
+    df_resumo_cruzeiro = round(df_resumo_cruzeiro.mean(), 2).reset_index()
+    df_resumo_cruzeiro.columns = ["estatistica", "media por jogo"]
+    
 
-    df_res_adv = df_res_adv.mean().reset_index()
+    df_res_adv = round(df_res_adv.mean(), 2).reset_index()
     df_res_adv.columns = ["estatistica", "media por jogo"]
-    df_res_adv["media por jogo"] = round(df_res_adv["media por jogo"], 2)
+    
     
     #ALTERANDO OS NOMES DAS ESTATÍSTICAS
-    df_resumo_ataque["estatistica"] = df_resumo_ataque["estatistica"].map({
+    df_resumo_cruzeiro["estatistica"] = df_resumo_cruzeiro["estatistica"].map({
         "posse_cruzeiro": "Posse de Bola do Cruzeiro",
         "chutes_cruzeiro": "Chutes do Cruzeiro",
         "chutes_gol_cruzeiro": "Chutes do Cruzeiro ao Gol",
@@ -483,9 +483,83 @@ def resumo_ataque(competicoes=[], mando=[]):
         "esc_adv": "Escanteios do Adversário"
     })
 
-    return df_resumo_ataque, df_res_adv
+    return df_resumo_cruzeiro, df_res_adv
 
 
+def resumo_defesa(competicoes=[], mando=[]):
+    import pandas as pd
+
+    #TABELAS QUE SERÃO USADAS
+    df_jogos = pd.read_excel("bases/jogos.xlsx")
+    df_defesa = pd.read_excel("bases/defesa.xlsx")
+
+    #JUNÇÃO DOS DFs
+    df_resumo_defesa = pd.merge(df_jogos[["id_jogo", "competicao", "mando"]], df_defesa, on="id_jogo", how="inner")
+
+    #REMOVER ESPAÇOS
+    df_resumo_defesa[["competicao", "mando"]] = remover_espacos(df=df_resumo_defesa[["competicao", "mando"]])
+
+    #FILTROS
+    df_resumo_defesa = filtro_comp_mando(c=competicoes, m=mando, df=df_resumo_defesa)
+
+    #DIVIDINDO O DF EM CRUZEIRO X ADVERSÁRIO
+    df_resumo_cruzeiro = df_resumo_defesa.drop(["id_jogo", "competicao", "mando", "desarmes_adv", "int_adv", 
+                                                "recup_adv", "cortes_adv"], axis=1)
+    df_resumo_adv = df_resumo_defesa[["faltas_sofridas", "faltas_cometidas", "desarmes_adv", "int_adv", "recup_adv", "cortes_adv", "duelos_chao", "duelos_aereos"]]
+    df_resumo_adv["duelos_chao_ganhos"] = df_resumo_adv["duelos_chao"] - df_resumo_cruzeiro["duelos_chao_ganhos"]
+    df_resumo_adv["duelos_aereos_ganhos"] = df_resumo_adv["duelos_aereos"] - df_resumo_cruzeiro["duelos_aereos_ganhos"]
+
+    #CALCULANDO A % DE DUELOS
+    df_resumo_cruzeiro["percent_duelos_chao_ganhos"] = (df_resumo_cruzeiro["duelos_chao_ganhos"] * 100) / df_resumo_cruzeiro["duelos_chao"]
+    df_resumo_cruzeiro["percent_duelos_aereos_ganhos"] = (df_resumo_cruzeiro["duelos_aereos_ganhos"] * 100) / df_resumo_cruzeiro["duelos_aereos"]
+
+    df_resumo_adv["percent_duelos_chao_ganhos"] = (df_resumo_adv["duelos_chao_ganhos"] * 100) / df_resumo_adv["duelos_chao"]
+    df_resumo_adv["percent_duelos_aereos_ganhos"] = (df_resumo_adv["duelos_aereos_ganhos"] * 100) / df_resumo_adv["duelos_aereos"]
+
+    #REMOVENDO COLUNAS DESNECESSÁRIAS
+    df_resumo_cruzeiro = df_resumo_cruzeiro.drop(["duelos_chao", "duelos_aereos"], axis=1)
+    df_resumo_adv = df_resumo_adv.drop(["duelos_chao", "duelos_aereos"], axis=1)
+
+    #CALCULANDO A MÉDIA
+    df_resumo_cruzeiro = round(df_resumo_cruzeiro.mean(), 2).reset_index()
+    df_resumo_cruzeiro.columns = ["estatistica", "media por jogo"]
+
+    df_resumo_adv = round(df_resumo_adv.mean(), 2).reset_index()
+    df_resumo_adv.columns = ["estatistica", "media por jogo"]
+
+    #ALTERANDO OS NOMES DAS ESTATÍSTICAS
+    df_resumo_cruzeiro["estatistica"] = df_resumo_cruzeiro["estatistica"].map({
+        "faltas_sofridas": "Faltas Sofridas",
+        "faltas_cometidas": "Faltas Cometidas",
+        "desarmes_cruzeiro": "Desarmes",
+        "int_cruzeiro": "Interceptações",
+        "recup_cruzeiro": "Recuperações de Bola",
+        "cortes_cruzeiro": "Cortes",
+        "duelos_chao_ganhos": "Duelos no Chão Ganhos",
+        "duelos_aereos_ganhos": "Duelos Aereos Ganhos",
+        "percent_duelos_chao_ganhos": "% Duelos no Chão Ganhos",
+        "percent_duelos_aereos_ganhos": "% Duelos Aereos Ganhos"
+    })
+
+    df_resumo_adv["estatistica"] = df_resumo_adv["estatistica"].map({
+        "faltas_sofridas": "Faltas Cometidas",
+        "faltas_cometidas": "Faltas Sofridas",
+        "desarmes_adv": "Desarmes",
+        "int_adv": "Interceptações",
+        "recup_adv": "Recuperações de Bola",
+        "cortes_adv": "Cortes",
+        "duelos_chao_ganhos": "Duelos no Chão Ganhos",
+        "duelos_aereos_ganhos": "Duelos Aereos Ganhos",
+        "percent_duelos_chao_ganhos": "% Duelos no Chão Ganhos",
+        "percent_duelos_aereos_ganhos": "% Duelos Aereos Ganhos"
+    })
+
+    df_resumo_cruzeiro.loc[[8, 9], "media por jogo"] = df_resumo_cruzeiro.loc[[8, 9], "media por jogo"].astype(str) + " %"
+    df_resumo_adv.loc[[8, 9], "media por jogo"] = df_resumo_adv.loc[[8, 9], "media por jogo"].astype(str) + " %"
 
 
+    return df_resumo_cruzeiro, df_resumo_adv
 
+df1, df2 = resumo_defesa()
+print(df1)
+print(df2)
