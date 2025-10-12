@@ -66,8 +66,7 @@ def gols(competicoes=[], mando=[]):
     gols = df_resumo_gols["gols"].value_counts().reset_index()
 
     #RENOMEANDO AS COLUNAS
-    gols = gols.rename(columns={'gols': 'jogador'})
-    gols = gols.rename(columns={'count': 'gols'})
+    gols.columns = ["jogador", "gols"]
 
     return gols.sort_values(by=("gols"), ascending=False)
 
@@ -113,9 +112,7 @@ def assistencias(competicoes=[], mando=[]):
 
     #CONTAGEM DE GOLS
     ass = df_resumo_ass["assistencias"].value_counts().reset_index()
-
-    ass = ass.rename(columns={'assistencias': 'jogador'})
-    ass = ass.rename(columns={'count': 'assistencias'})
+    ass.columns = ["jogador", "assistencias"]
 
     #REMOVENDO COLUNAS COM NONE, PENALTI E FALTA
     ass = ass[~ass["jogador"].isin(["NONE", "PÊNALTI", "FALTA"])]
@@ -458,29 +455,29 @@ def resumo_ataque(competicoes=[], mando=[]):
     
     #ALTERANDO OS NOMES DAS ESTATÍSTICAS
     df_resumo_cruzeiro["estatistica"] = df_resumo_cruzeiro["estatistica"].map({
-        "posse_cruzeiro": "Posse de Bola do Cruzeiro",
-        "chutes_cruzeiro": "Chutes do Cruzeiro",
-        "chutes_gol_cruzeiro": "Chutes do Cruzeiro ao Gol",
-        "chutes_area_cruzeiro": "Chutes do Cruzeiro Dentro da Área",
-        "chutes_fora_area_cruzeiro": "Chutes do Cruzeiro de Fora da Área",
-        "passes_cruzeiro": "Passes do Cruzeiro",
-        "passes_certos_cruzeiro": "Passes Certos do Cruzeiro",
-        "esc_cruzeiro": "Escanteios do Cruzeiro",
-        "lancamentos_cruzeiro": "Lançamentos do Cruzeiro",
-        "lancamentos_cruzeiro_certos": "Lançamentos Certos do Cruzeiro",
-        "cruzamentos_cruzeiro": "Cruzamentos do Cruzeiro",
-        "cruzamentos_cruzeiro_certos": "Cruzamentos Certos do Cruzeiro"
+        "posse_cruzeiro": "Posse de Bola",
+        "chutes_cruzeiro": "Chutes",
+        "chutes_gol_cruzeiro": "Chutes ao Gol",
+        "chutes_area_cruzeiro": "Chutes de Dentro da Área",
+        "chutes_fora_area_cruzeiro": "Chutes de Fora da Área",
+        "passes_cruzeiro": "Passes",
+        "passes_certos_cruzeiro": "Passes Certos",
+        "esc_cruzeiro": "Escanteios",
+        "lancamentos_cruzeiro": "Lançamentos",
+        "lancamentos_cruzeiro_certos": "Lançamentos Certos",
+        "cruzamentos_cruzeiro": "Cruzamentos",
+        "cruzamentos_cruzeiro_certos": "Cruzamentos Certos"
     })
 
     df_res_adv["estatistica"] = df_res_adv["estatistica"].map({
-        "posse_adv": "Posse de Bola do Adversário",
-        "chutes_adv": "Chutes do Adversário",
-        "chutes_gol_adv": "Chutes do Adversário ao Gol",
-        "chutes_area_adv": "Chutes do Adversário Dentro da Área",
-        "chutes_fora_area_adv": "Chutes do Adversário de Fora da Área",
-        "passes_adv": "Passes do Adversário",
-        "passes_certos_adv": "Passes Certos do Adversário",
-        "esc_adv": "Escanteios do Adversário"
+        "posse_adv": "Posse de Bola",
+        "chutes_adv": "Chutes",
+        "chutes_gol_adv": "Chutes ao Gol",
+        "chutes_area_adv": "Chutes de Dentro da Área",
+        "chutes_fora_area_adv": "Chutes de Fora da Área",
+        "passes_adv": "Passes",
+        "passes_certos_adv": "Passes Certos",
+        "esc_adv": "Escanteios"
     })
 
     return df_resumo_cruzeiro, df_res_adv
@@ -538,7 +535,7 @@ def resumo_defesa(competicoes=[], mando=[]):
         "duelos_chao_ganhos": "Duelos no Chão Ganhos",
         "duelos_aereos_ganhos": "Duelos Aereos Ganhos",
         "percent_duelos_chao_ganhos": "% Duelos no Chão Ganhos",
-        "percent_duelos_aereos_ganhos": "% Duelos Aereos Ganhos"
+        "percent_duelos_aereos_ganhos": "% Duelos Aéreos Ganhos"
     })
 
     df_resumo_adv["estatistica"] = df_resumo_adv["estatistica"].map({
@@ -551,15 +548,45 @@ def resumo_defesa(competicoes=[], mando=[]):
         "duelos_chao_ganhos": "Duelos no Chão Ganhos",
         "duelos_aereos_ganhos": "Duelos Aereos Ganhos",
         "percent_duelos_chao_ganhos": "% Duelos no Chão Ganhos",
-        "percent_duelos_aereos_ganhos": "% Duelos Aereos Ganhos"
+        "percent_duelos_aereos_ganhos": "% Duelos Aéreos Ganhos"
     })
-
-    df_resumo_cruzeiro.loc[[8, 9], "media por jogo"] = df_resumo_cruzeiro.loc[[8, 9], "media por jogo"].astype(str) + " %"
-    df_resumo_adv.loc[[8, 9], "media por jogo"] = df_resumo_adv.loc[[8, 9], "media por jogo"].astype(str) + " %"
-
 
     return df_resumo_cruzeiro, df_resumo_adv
 
-df1, df2 = resumo_defesa()
-print(df1)
-print(df2)
+
+def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola"):
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    #QUAIS SÃO AS ESTATÍSTICAS PRINCIPAIS A SEREM MOSTRADAS AQUI?
+
+    #TABELAS QUE SERÃO USADAS
+    df_resumo_ataque_cruzeiro, df_resumo_ataque_adv = resumo_ataque(competicoes=competicoes, mando=mando)
+    df_resumo_defesa_cruzeiro, df_resumo_defesa_adv = resumo_defesa(competicoes=competicoes, mando=mando)
+
+    #PRIMEIRO GRÁFICO (PIZZA = TERÁ UM FILTRO DA ESTATÍSTICA A SER MOSTRADA AQUI)
+    if filtro_grafico in ["Posse de Bola", "Chutes", "Chutes ao Gol", "Chutes de Dentro da Área", "Chutes de Fora da Área", "Passes", "Passes Certos", "Escanteios"]:
+        media_cruzeiro = df_resumo_ataque_cruzeiro.loc[df_resumo_ataque_cruzeiro["estatistica"] == filtro_grafico, "media por jogo"].values[0]
+        media_adv = df_resumo_ataque_adv.loc[df_resumo_ataque_adv["estatistica"] == filtro_grafico, "media por jogo"].values[0]
+    
+    else:
+        media_cruzeiro = df_resumo_defesa_cruzeiro.loc[df_resumo_defesa_cruzeiro["estatistica"] == filtro_grafico, "media por jogo"].values[0]
+        media_adv = df_resumo_defesa_adv.loc[df_resumo_defesa_adv["estatistica"] == filtro_grafico, "media por jogo"].values[0]
+
+    valores = [media_cruzeiro, media_adv]
+    fig1, ax1 = plt.subplots()
+    wedges, texts = ax1.pie(valores, 
+            labels=["Cruzeiro", "Adversário"], startangle=90, colors=["#0038A7", "#67e4f5"])
+    
+    for i, wedge in enumerate(wedges):
+        ang = (wedge.theta2 - wedge.theta1) / 2. + wedge.theta1
+        x = wedge.r * 0.6 * np.cos(np.deg2rad(ang))
+        y = wedge.r * 0.6 * np.sin(np.deg2rad(ang))
+        ax1.text(x, y, f"{valores[i]}", ha="center", fontsize=10)
+
+    ax1.set_title(f" Média por Jogo de {filtro_grafico}", color="#002266", fontweight="bold", fontsize=14)
+    
+    return fig1
+
+
+
