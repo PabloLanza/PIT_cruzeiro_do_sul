@@ -589,4 +589,11 @@ def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola"):
     return fig1
 
 
+def to_excel(df):
+    from io import BytesIO
+    import pandas as pd
 
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        df.to_excel(writer, index=False, sheet_name="Dados")
+    return output.getvalue()

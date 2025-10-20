@@ -19,20 +19,24 @@ mando_sel = st.multiselect("Selecione os Mandos: ", ['Casa', 'Fora'])
 st.title("Ranking de Artilheiros")
 df_gols = func.gols(competicoes=competicao_sel, mando=mando_sel)
 st.table(df_gols)
+st.button("Baixar Excel")
 
 #TABELA DE ASSISTÊNCIAS
 st.title("Ranking de Assistências")
 df_ass = func.assistencias(competicoes=competicao_sel, mando=mando_sel)
 st.table(df_ass)
+st.button("Baixar Excel")
 
 #TABELA DE PARTICIPAÇÕES EM GOLS
 st.title("Ranking de Participações em Gols")
 df_participacoes = func.participacoes(competicoes=competicao_sel, mando=mando_sel)
 st.table(df_participacoes)
+st.button("Baixar Excel")
 
 #TABELA DE DOBRADINHAS
 st.title("Ranking de Dobradinhas")
 st.write("Dobradinha é quando um jogador x da assistencias pra um jogador y fazer o gol ou vice-versa")
 df_dobradinha = func.dobradinha(competicoes=competicao_sel, mando=mando_sel)
 st.table(df_dobradinha)
+st.button("Baixar Excel")
 
