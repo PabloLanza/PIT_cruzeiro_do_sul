@@ -14,37 +14,12 @@ Bem-vindo ao **Painel Interativo**, um projeto desenvolvido em **Python** com o 
 
 ---
 
-## 🧭 Estrutura do Projeto
-````
-📁 trabalho/
-│
-├── home.py # Página inicial do painel
-├── func.py # Funções usadas
-├── requirements.txt # Bibliotecas necessárias
-├── pages/ # Outras páginas do projeto
-│ ├── 1_artilharia.py
-│ ├── 2_chutes.py
-│ ├── 3_minutos_dos_gols.py
-│ └── 4_passes.py
-│
-├── bases/ # Bases de dados utilizadas
-│ ├── ataque.xlsx
-│ ├── defesa.xlsx
-│ ├── escalacoes.xlsx
-│ └── jogos.xlsx
-│
-└── images/
-  └── img.jpg
-````
-
----
-
 ## ⚙️ Pré-requisitos
 
 - Conexão com a Internet
 ---
  ▶️ Como Executar o Projeto
-- Acesse o link:
+- Acesse o link: https://pitcruzeirodosul.streamlit.app
 ---
 
 
