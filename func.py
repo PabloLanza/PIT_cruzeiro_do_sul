@@ -204,7 +204,7 @@ def participacoes(competicoes=[], mando=[]):
     return df_participacoes.sort_values(by="participacoes", ascending=False)    
     
     
-def perfil_finalizacoes(competicoes=[], mando=[]):
+def perfil_finalizacoes(competicoes=[], mando=[], dalt=False):
 
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -233,6 +233,11 @@ def perfil_finalizacoes(competicoes=[], mando=[]):
     
 
     #GRAFICO PIZZA CHUTES DENTRO E FORA AREA
+    if dalt:
+        cores = ["#0038A7", "#eeff00"]
+    else:
+        cores = ["#0038A7","#67e4f5"]
+
     valores1 = df_chutes_sum.loc[["chutes_nao_gol_cruzeiro", "chutes_gol_cruzeiro"], "soma"]
     valores2 = df_chutes_sum.loc[["chutes_nao_gol_adv", "chutes_gol_adv"], "soma"]
     valores3 = df_chutes_sum.loc[["chutes_area_cruzeiro", "chutes_fora_area_cruzeiro"], "soma"]
@@ -240,33 +245,33 @@ def perfil_finalizacoes(competicoes=[], mando=[]):
 
     fig1, ax1 = plt.subplots()
     ax1.pie(valores1,
-            labels=["Chutes Sem Direção do Gol", "Chutes Ao Gol"], autopct="%.1f%%", startangle=90, colors=["#427ef5", "#f5ba67"],
+            labels=["Chutes Sem Direção do Gol", "Chutes Ao Gol"], autopct="%.1f%%", startangle=90, colors=cores,
             wedgeprops={"width": 0.4})
     ax1.set_title("Chutes Sem Direção x Chutes Ao Gol - Cruzeiro", color="#427ef5", fontweight="bold", fontsize=14)
     ax1.set_aspect("equal")
 
     fig2, ax2 = plt.subplots()
     ax2.pie(valores2,
-            labels=["Chutes Sem Direção do Gol", "Chutes Ao Gol"], autopct="%.1f%%", startangle=90, colors=["#427ef5", "#f5ba67"],
+            labels=["Chutes Sem Direção do Gol", "Chutes Ao Gol"], autopct="%.1f%%", startangle=90, colors=cores,
             wedgeprops={"width": 0.4})
     ax2.set_title("Chutes Sem Direção x Chutes Ao Gol - Adversário", color="#427ef5", fontweight="bold", fontsize=14)
     ax2.set_aspect("equal")
 
     fig3, ax3 = plt.subplots()
     ax3.pie(valores3, 
-            labels=["Dentro da Área", "Fora da Área"], autopct="%.1f%%", startangle=90, colors=["#427ef5", "#f5ba67"])
+            labels=["Dentro da Área", "Fora da Área"], autopct="%.1f%%", startangle=90, colors=cores)
     ax3.set_title("Perfil das Finalizações do Cruzeiro", color="#427ef5", fontweight="bold", fontsize=14)
 
     fig4, ax4 = plt.subplots()
     ax4.pie(valores4,
-            labels=["Dentro da Área", "Fora da Área"], autopct="%.1f%%", startangle=90, colors=["#427ef5", "#f5ba67"])
+            labels=["Dentro da Área", "Fora da Área"], autopct="%.1f%%", startangle=90, colors=cores)
     ax4.set_title("Perfil das Finalizações do Adversário", color="#427ef5", fontweight="bold", fontsize=14)
     plt.tight_layout()
 
     return fig1, fig2, fig3, fig4
     
 
-def passes_trocados(competicoes=[], mando=[]):
+def passes_trocados(competicoes=[], mando=[], dalt=False):
 
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -293,10 +298,17 @@ def passes_trocados(competicoes=[], mando=[]):
     passes_certos_adv = df_passes["passes_certos_adv"]
 
     #GRÁFICOS DE LINHAS
+    if dalt:
+        cor_crz = "#0038A7"
+        cor_adv = "#eeff00"
+    else:
+        cor_crz = "#0038A7"
+        cor_adv = "#67e4f5"
+    
     fig1, ax1 = plt.subplots(figsize=(10,5))
 
-    ax1.plot(x, passes_cruzeiro, label="Passes Cruzeiro", marker="o", color="darkblue")
-    ax1.plot(x, passes_adv, label="Passes Adversário", marker="o", color="lightblue")
+    ax1.plot(x, passes_cruzeiro, label="Passes Cruzeiro", marker="o", color=cor_crz)
+    ax1.plot(x, passes_adv, label="Passes Adversário", marker="o", color=cor_adv)
 
     ax1.set_title("Passes Trocados Por Jogo", fontsize=16)
     ax1.legend()
@@ -306,8 +318,8 @@ def passes_trocados(competicoes=[], mando=[]):
 
     fig2, ax2 = plt.subplots(figsize=(10,5))
 
-    ax2.plot(x, passes_certos_cruzeiro, label="Passes Certos Cruzeiro", marker="o", color="darkblue")
-    ax2.plot(x, passes_certos_adv, label="Passes Certos Adversários", marker="o", color="lightblue")
+    ax2.plot(x, passes_certos_cruzeiro, label="Passes Certos Cruzeiro", marker="o", color=cor_crz)
+    ax2.plot(x, passes_certos_adv, label="Passes Certos Adversários", marker="o", color=cor_adv)
 
     ax2.set_title("Passes Certos Por Jogo", fontsize=16)
     ax2.legend()
@@ -336,7 +348,7 @@ def normalizar(val):
         return []
 
 
-def minutos_gols(competicoes=[], mando=[]):
+def minutos_gols(competicoes=[], mando=[], dalt=False):
 
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -402,10 +414,17 @@ def minutos_gols(competicoes=[], mando=[]):
     x = np.arange(len(intervalos))
 
     #CRIANDO O GRÁFICO
-    fig, ax = plt.subplots(figsize=(10, 6))
-    barras1 = ax.bar(x - largura/2, gols_cruzeiro, width=largura, color="darkblue", label="Gols do Cruzeiro")
+    if dalt:
+        cor_crz = "#0038A7"
+        cor_adv = "#eeff00"
+    else:
+        cor_crz = "#0038A7"
+        cor_adv = "#67e4f5"
 
-    barras2 = ax.bar(x + largura/2, gols_adv, width=largura, color="#fcba03", label="Gols do Adversário")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    barras1 = ax.bar(x - largura/2, gols_cruzeiro, width=largura, color=cor_crz, label="Gols do Cruzeiro")
+
+    barras2 = ax.bar(x + largura/2, gols_adv, width=largura, color=cor_adv, label="Gols do Adversário")
 
     ax.set_title("Gols por Intervalo de Minutos", fontsize=16, color="darkblue", fontweight="bold")
     ax.set_xlabel("Intervalo (Minutos)", color="darkblue", fontweight="bold")
@@ -554,7 +573,7 @@ def resumo_defesa(competicoes=[], mando=[]):
     return df_resumo_cruzeiro, df_resumo_adv
 
 
-def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola"):
+def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola", dalt=False):
     import pandas as pd
     import matplotlib.pyplot as plt
     import numpy as np
@@ -573,10 +592,15 @@ def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola"):
         media_cruzeiro = df_resumo_defesa_cruzeiro.loc[df_resumo_defesa_cruzeiro["estatistica"] == filtro_grafico, "media por jogo"].values[0]
         media_adv = df_resumo_defesa_adv.loc[df_resumo_defesa_adv["estatistica"] == filtro_grafico, "media por jogo"].values[0]
 
+    if dalt:
+        cores = ["#0038A7", "#eeff00"]
+    else:
+        cores = ["#0038A7","#67e4f5"]
+        
     valores = [media_cruzeiro, media_adv]
     fig1, ax1 = plt.subplots()
     wedges, texts = ax1.pie(valores, 
-            labels=["Cruzeiro", "Adversário"], startangle=90, colors=["#0038A7", "#67e4f5"])
+            labels=["Cruzeiro", "Adversário"], startangle=90, colors=cores)
     
     for i, wedge in enumerate(wedges):
         ang = (wedge.theta2 - wedge.theta1) / 2. + wedge.theta1
@@ -592,8 +616,22 @@ def resumo_geral(competicoes=[], mando=[], filtro_grafico="Posse de Bola"):
 def to_excel(df):
     from io import BytesIO
     import pandas as pd
-
+    
     output = BytesIO()
-    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+    # Usa o openpyxl, que é o engine padrão do pandas
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
         df.to_excel(writer, index=False, sheet_name="Dados")
     return output.getvalue()
+
+
+def mostrar_filtro(c, m):
+    if len(c) < 1:
+        comp = ["Mineiro", "Sul Americana", "Brasileiro", "Copa do Brasil"]
+    else:
+        comp = c
+    if len(m) < 1:
+        man = ["Casa", "Fora"]
+    else:
+        man = m
+    
+    return comp, man
