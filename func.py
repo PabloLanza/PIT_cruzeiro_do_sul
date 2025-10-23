@@ -634,4 +634,5 @@ def mostrar_filtro(c, m):
     else:
         man = m
     
+
     return comp, man
